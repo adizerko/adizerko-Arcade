@@ -2,159 +2,314 @@ import { registerGame } from "../../core/engine.js";
 
 const memoryGame = {
   start() {
-    if (!document.getElementById("memory-style")) {
-      const link = document.createElement("link");
-      link.id = "memory-style";
-      link.rel = "stylesheet";
-      link.href = "./js/games/memory/memory.css";
-      document.head.appendChild(link);
+    const app = document.getElementById("app");
+
+    // Инъекция стилей (все в одном месте, без дублирования)
+    if (!document.getElementById("memory-dynamic-style")) {
+      const style = document.createElement("style");
+      style.id = "memory-dynamic-style";
+      style.textContent = `
+        /* Layout Containers */
+        .memory-overlay {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-start;
+          padding: 40px 20px;
+          min-height: 100vh;
+          background: #0f172a;
+          color: white;
+          font-family: system-ui, -apple-system, sans-serif;
+          box-sizing: border-box;
+        }
+
+        /* Typography */
+        .memory-title {
+          font-size: clamp(38px, 10vw, 56px);
+          font-weight: 900;
+          letter-spacing: 2px;
+          text-transform: uppercase;
+          background: linear-gradient(135deg, #943d9e 0%, #ad80da 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          filter: drop-shadow(0 0 15px rgba(168, 85, 247, 0.4));
+          margin-bottom: 5px;
+          text-align: center;
+        }
+
+        .memory-subtitle {
+          color: #94a3b8;
+          margin-bottom: clamp(25px, 5vh, 40px);
+          font-size: 10px;
+          font-weight: 600;
+          letter-spacing: 2px;
+          text-transform: uppercase;
+          text-align: center;
+        }
+
+        /* Level Selection Menu */
+        .level-menu {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          width: 100%;
+          max-width: 320px;
+        }
+
+        .level-card {
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          padding: 18px 24px;
+          border-radius: 20px;
+          cursor: pointer;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .level-card:hover {
+          background: rgba(168, 85, 247, 0.1);
+          border-color: rgba(168, 85, 247, 0.4);
+          transform: translateY(-3px);
+        }
+
+        .level-info h3 { margin: 0; font-size: 18px; color: #f8fafc; }
+        .level-info span { font-size: 11px; color: #64748b; font-family: monospace; }
+
+        /* Game Grid */
+        .memory-grid {
+          display: grid;
+          gap: clamp(8px, 2vw, 12px);
+          margin-bottom: 25px;
+          justify-content: center;
+        }
+
+        .memory-card {
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          backdrop-filter: blur(10px);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 14px;
+          cursor: pointer;
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          user-select: none;
+          position: relative;
+        }
+
+        .memory-card.flipped {
+          background: rgba(168, 85, 247, 0.15);
+          border-color: rgba(168, 85, 247, 0.6);
+          transform: rotateY(180deg);
+        }
+
+        @keyframes matchFlash {
+          0% { transform: rotateY(180deg) scale(1); }
+          50% { transform: rotateY(180deg) scale(1.05); box-shadow: 0 0 30px rgba(34, 197, 94, 0.4); border-color: #22c55e; }
+          100% { transform: rotateY(180deg) scale(1); border-color: rgba(34, 197, 94, 0.5); }
+        }
+        .memory-card.matched {
+          animation: matchFlash 0.5s ease-out forwards;
+          background: rgba(34, 197, 94, 0.1) !important;
+        }
+
+        /* Buttons */
+        .action-btn { 
+          background: rgba(255, 255, 255, 0.05); 
+          border: 1px solid rgba(255, 255, 255, 0.1); 
+          border-radius: 50px; 
+          padding: 14px 30px; 
+          color: rgba(255, 255, 255, 0.8); 
+          font-size: 13px; font-weight: 700; 
+          text-transform: uppercase; cursor: pointer; 
+          transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+          background: rgba(255, 255, 255, 0.1);
+          color: white;
+          transform: translateY(-2px);
+        }
+
+        .btn-danger:hover {
+          background: rgba(239, 68, 68, 0.15);
+          border-color: rgba(239, 68, 68, 0.4);
+          color: #fca5a5;
+        }
+
+        /* Modal Modern */
+        .win-modal {
+          display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%) scale(0.8);
+          background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+          padding: 35px; border-radius: 30px; text-align: center; z-index: 2000;
+          width: 90%; max-width: 340px; opacity: 0;
+          transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+          border: 1px solid rgba(168, 85, 247, 0.3);
+          box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+        }
+        .win-modal.active { display: block; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
+        .stat-card { background: rgba(255, 255, 255, 0.03); border-radius: 16px; padding: 15px; border: 1px solid rgba(255, 255, 255, 0.08); }
+        .stat-value { font-size: 22px; font-weight: 800; color: #f1f5f9; display: block; }
+        .stat-label { font-size: 10px; color: #64748b; text-transform: uppercase; margin-top: 4px; }
+
+        .modal-btns { display: flex; flex-direction: column; gap: 10px; }
+        .btn-restart { background: rgba(168, 85, 247, 0.15) !important; border-color: #a855f7 !important; color: white !important; }
+        .btn-restart:hover { box-shadow: 0 0 20px rgba(168, 85, 247, 0.3); background: rgba(168, 85, 247, 0.25) !important; }
+      `;
+      document.head.appendChild(style);
     }
 
-    const app = document.getElementById("app");
-    let startTime = null;
+    const levels = [
+      { id: 'easy', name: 'Easy', rows: 3, cols: 4 },
+      { id: 'medium', name: 'Medium', rows: 4, cols: 4 },
+      { id: 'hard', name: 'Hard', rows: 5, cols: 6 },
+      { id: 'master', name: 'Master', rows: 6, cols: 6 }
+    ];
 
-    function render() {
+    const symbols = ["🍎","🍌","🍇","🍉","🍓","🍒","🥝","🍍","🥭","🍑","🍐","🍋","🍊","🍈","🍏","🫐","🥥","🥝"];
+
+    const showLevelMenu = () => {
       app.innerHTML = `
         <div class="memory-overlay">
-          <h1 class="menu-title" style="margin-bottom:20px;">MEMORY</h1>
-          <div class="memory-grid" id="memory-grid"></div>
-          <button class="back-btn" id="go-back">Exit to Menu</button>
-          <div id="win-modal" style="
-            display:none;
-            position:absolute;
-            background:#1e293b;
-            color:white;
-            padding:20px;
-            border-radius:20px;
-            text-align:center;
-            z-index:2000;
-            font-family:system-ui;
-            opacity:0;
-            transition: all 0.3s ease-out;
-            width:90%;
-            max-width:400px;
-            box-sizing:border-box;
-          ">
-            <h2>You Won!</h2>
-            <p id="win-time"></p>
-            <div style="margin-top:15px; display:flex; justify-content:space-between; gap:10px;">
-              <button id="win-restart" style="
-                flex:1;
-                height:45px;
-                border:none;
-                border-radius:12px;
-                background:#22c55e;
-                color:white;
-                font-weight:bold;
-                cursor:pointer;
-              ">Restart</button>
-              <button id="win-back" style="
-                flex:1;
-                height:45px;
-                border:none;
-                border-radius:12px;
-                background:#2563eb;
-                color:white;
-                font-weight:bold;
-                cursor:pointer;
-              ">Back to Menu</button>
+          <h1 class="memory-title">MEMORY</h1>
+          <p class="memory-subtitle">Choose Difficulty</p>
+          <div class="level-menu">
+            ${levels.map(l => `
+              <div class="level-card" data-id="${l.id}">
+                <div class="level-info">
+                  <h3>${l.name}</h3>
+                  <span>Grid ${l.cols}x${l.rows}</span>
+                </div>
+                <div style="color:#a855f7">→</div>
+              </div>
+            `).join('')}
+          </div>
+          <button id="main-back" class="action-btn" style="margin-top: auto; width: 220px;">Back to Home</button>
+        </div>
+      `;
+
+      document.getElementById("main-back").onclick = () => location.reload();
+      document.querySelectorAll(".level-card").forEach(card => {
+        card.onclick = () => startLevel(levels.find(l => l.id === card.dataset.id));
+      });
+    };
+
+    const startLevel = (level) => {
+      let moves = 0;
+      let startTime = Date.now();
+      let flippedCards = [];
+      let matchedCount = 0;
+      let isLockBoard = false;
+
+      const totalCards = level.rows * level.cols;
+      const gameSymbols = symbols.slice(0, totalCards / 2);
+      const cardsArray = this.shuffle([...gameSymbols, ...gameSymbols]);
+
+      app.innerHTML = `
+        <div class="memory-overlay">
+          <h1 class="memory-title" style="font-size: 28px;">MEMORY</h1>
+          <p class="memory-subtitle">${level.name} Mode</p>
+          
+          <div class="memory-grid" id="memory-grid" style="grid-template-columns: repeat(${level.cols}, 1fr);"></div>
+          
+          <button id="give-up" class="action-btn btn-danger" style="width: 180px;">Quit Game</button>
+
+          <div id="win-modal" class="win-modal">
+            <h2 style="margin:0; font-size: 24px; color:#a855f7;">VICTORY!</h2>
+            <div class="stat-grid">
+              <div class="stat-card">
+                <span id="win-time" class="stat-value">0s</span>
+                <span class="stat-label">Time</span>
+              </div>
+              <div class="stat-card">
+                <span id="win-moves" class="stat-value">0</span>
+                <span class="stat-label">Moves</span>
+              </div>
+            </div>
+            <div class="modal-btns">
+              <button id="win-restart" class="action-btn btn-restart">Play Again</button>
+              <button id="win-menu" class="action-btn">Main Menu</button>
             </div>
           </div>
         </div>
       `;
 
-      document.getElementById("go-back").onclick = () => location.reload();
-      document.getElementById("win-back").onclick = () => location.reload();
-      document.getElementById("win-restart").onclick = () => {
-        hideWinModal();
-        startGameLogic();
-      };
-
-      startGameLogic();
-    }
-
-    function startGameLogic() {
       const grid = document.getElementById("memory-grid");
-      const symbols = ["🍎","🍌","🍇","🍉","🍓","🍒","🥝","🍍"];
-      const cardsArray = [...symbols, ...symbols];
-      shuffle(cardsArray);
-
-      grid.innerHTML = "";
-      let flippedCards = [];
-      let matched = 0;
-      startTime = Date.now();
+      const cardSize = level.cols > 4 ? "clamp(45px, 13vw, 55px)" : "clamp(65px, 18vw, 75px)";
 
       cardsArray.forEach(symbol => {
         const card = document.createElement("div");
-        card.className = "card";
+        card.className = "memory-card";
+        card.style.width = cardSize;
+        card.style.height = cardSize;
+        card.style.fontSize = level.cols > 4 ? "20px" : "28px";
         card.dataset.symbol = symbol;
-        card.innerText = "";
+
         card.onclick = () => {
-          if (card.classList.contains("flipped") || flippedCards.length === 2) return;
+          if (isLockBoard || card.classList.contains("flipped") || card.classList.contains("matched")) return;
 
           card.classList.add("flipped");
-          card.innerText = symbol;
+          card.textContent = symbol;
           flippedCards.push(card);
 
           if (flippedCards.length === 2) {
-            if (flippedCards[0].dataset.symbol === flippedCards[1].dataset.symbol) {
-              flippedCards = [];
-              matched += 2;
-              if (matched === cardsArray.length) {
-                const elapsed = Math.floor((Date.now() - startTime) / 1000);
-                showWinModal();
-                document.getElementById("win-time").innerText = `Time: ${elapsed} s`;
-              }
+            moves++;
+            isLockBoard = true;
+            const [c1, c2] = flippedCards;
+
+            if (c1.dataset.symbol === c2.dataset.symbol) {
+              matchedCount += 2;
+              setTimeout(() => {
+                c1.classList.add("matched");
+                c2.classList.add("matched");
+                flippedCards = [];
+                isLockBoard = false;
+                if (matchedCount === totalCards) {
+                  const elapsed = Math.floor((Date.now() - startTime) / 1000);
+                  showWinModal(elapsed, moves);
+                }
+              }, 400);
             } else {
               setTimeout(() => {
-                flippedCards.forEach(c => {
-                  c.classList.remove("flipped");
-                  c.innerText = "";
-                });
+                c1.classList.remove("flipped");
+                c1.textContent = "";
+                c2.classList.remove("flipped");
+                c2.textContent = "";
                 flippedCards = [];
+                isLockBoard = false;
               }, 800);
             }
           }
         };
         grid.appendChild(card);
       });
+
+      const showWinModal = (time, totalMoves) => {
+        const modal = document.getElementById("win-modal");
+        document.getElementById("win-time").textContent = `${time}s`;
+        document.getElementById("win-moves").textContent = totalMoves;
+        modal.classList.add("active");
+
+        document.getElementById("win-restart").onclick = () => startLevel(level);
+        document.getElementById("win-menu").onclick = showLevelMenu;
+      };
+
+      document.getElementById("give-up").onclick = showLevelMenu;
+    };
+
+    showLevelMenu();
+  },
+
+  shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
     }
-
-    // Модальное окно теперь позиционируем по центру grid
-    function showWinModal() {
-      const modal = document.getElementById("win-modal");
-      const grid = document.getElementById("memory-grid");
-      const rect = grid.getBoundingClientRect();
-      const overlayRect = grid.parentElement.getBoundingClientRect();
-      const top = rect.top - overlayRect.top + rect.height / 2; // центр сетки
-      const left = rect.left - overlayRect.left + rect.width / 2; // центр сетки
-
-      modal.style.top = `${top}px`;
-      modal.style.left = `${left}px`;
-      modal.style.transform = `translate(-50%, -50%) scale(0.8)`;
-      modal.style.display = "block";
-
-      setTimeout(() => {
-        modal.style.opacity = "1";
-        modal.style.transform = `translate(-50%, -50%) scale(1)`;
-      }, 10);
-    }
-
-    function hideWinModal() {
-      const modal = document.getElementById("win-modal");
-      modal.style.opacity = "0";
-      modal.style.transform = "translate(-50%, -50%) scale(0.8)";
-      setTimeout(() => modal.style.display = "none", 300);
-    }
-
-    function shuffle(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-    }
-
-    render();
+    return array;
   }
 };
 

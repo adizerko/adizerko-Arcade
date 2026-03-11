@@ -54,3 +54,55 @@
   border-radius: 12px;
   cursor: pointer;
 }
+
+/* Модальное окно */
+.win-modal {
+  display: none;
+  position: absolute;
+  background: #1e293b;
+  color: white;
+  padding: 20px;
+  border-radius: 20px;
+  text-align: center;
+  z-index: 2000;
+  font-family: system-ui;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  width: 90%;
+  max-width: 320px;
+  box-sizing: border-box;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+.win-modal.show {
+  display: block;
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1) !important;
+}
+
+.modal-btns {
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.modal-btns button {
+  flex: 1;
+  height: 45px;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: filter 0.2s;
+}
+
+.btn-restart { background: #22c55e; }
+.btn-back { background: #2563eb; }
+.modal-btns button:hover { filter: brightness(1.1); }
+
+/* Анимация карточек */
+.card:active {
+  transform: scale(0.95);
+}

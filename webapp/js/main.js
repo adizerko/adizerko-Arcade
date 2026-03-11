@@ -1,14 +1,13 @@
-// webapp/js/main.js
 import { initEngine } from "./core/engine.js";
 import { showMenu } from "./ui/menu/menu.js";
+
+// ИМПОРТИРУЕМ ИГРЫ
 import "./games/reaction/reaction.js";
+import "./games/memory/memory.js";  // <-- обязательно здесь
 
-// Инициализация Telegram Web App
 const tg = window.Telegram.WebApp;
-
-// Сообщаем Telegram, что приложение готово, и расширяем его
 tg.ready();
-tg.expand(); 
+tg.expand();
 
 initEngine();
-showMenu();
+showMenu();  // теперь кнопки найдут зарегистрированные игры

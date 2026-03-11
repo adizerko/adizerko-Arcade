@@ -1,0 +1,56 @@
+.memory-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #0f172a;
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+  align-items: center; /* оставляем по горизонтали центр */
+  justify-content: flex-start; /* выравнивание по верхнему краю */
+  padding: 40px 20px 20px 20px; /* отступ сверху, слева/справа */
+  box-sizing: border-box;
+}
+
+.memory-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  max-width: 400px;
+  margin-bottom: 20px;
+}
+
+.card {
+  width: 70px;
+  height: 70px;
+  background: #1e293b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: bold;
+  color: white;
+  border-radius: 12px;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.card.flipped {
+  background: #2563eb;
+  color: #fff;
+}
+
+.back-btn {
+  height: 50px;
+  background: #1e293b;
+  color: white;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 12px;
+  cursor: pointer;
+}

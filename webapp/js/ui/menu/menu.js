@@ -17,10 +17,10 @@ export function showMenu() {
                     <div class="game-status">PLAY NOW</div>
                 </div>
 
-                <div class="game-card disabled">
+                <div class="game-card active" id="btn-memory">
                     <div class="game-icon">🧠</div>
                     <div class="game-title">Memory</div>
-                    <div class="game-status">COMING SOON</div>
+                    <div class="game-status">PLAY NOW</div>
                 </div>
 
                 <div class="game-card disabled">
@@ -41,5 +41,10 @@ export function showMenu() {
     const reactionBtn = document.getElementById("btn-reaction");
     if (reactionBtn) {
         reactionBtn.onclick = () => startGame("reaction");
+    }
+
+    const memoryBtn = document.getElementById("btn-memory");
+    if (memoryBtn) {
+        memoryBtn.onclick = () => startGame("memory");
     }
 }

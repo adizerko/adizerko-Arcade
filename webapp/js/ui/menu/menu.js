@@ -26,7 +26,7 @@ export function showMenu() {
                 <div class="game-card active" id="btn-math">
                     <div class="game-icon">🎲</div>
                     <div class="game-title">Math</div>
-                    <div class="game-status">COMING SOON</div>
+                    <div class="game-status">PLAY NOW</div>
                 </div>
 
                 <div class="game-card disabled">

@@ -1,84 +1,64 @@
 import { registerGame } from "../../core/engine.js";
 
-/* Динамическая загрузка CSS игры */
-function loadGameCSS(path){
-    const existing = document.getElementById("game-style");
-    if(existing) existing.remove();
-
-    const link = document.createElement("link");
-    link.id = "game-style";
-    link.rel = "stylesheet";
-    link.href = path;
-    document.head.appendChild(link);
-}
-
 const reactionGame = {
-    start(){
-        loadGameCSS("./js/games/reaction/reaction.css");
+    start() {
+        // Подгружаем CSS игры динамически
+        if (!document.getElementById("reaction-style")) {
+            const link = document.createElement("link");
+            link.id = "reaction-style";
+            link.rel = "stylesheet";
+            link.href = "./js/games/reaction/reaction.css";
+            document.head.appendChild(link);
+        }
 
         const app = document.getElementById("app");
 
-        /* Показ стартового экрана с правилами */
-        function showStartScreen(){
+        function render() {
             app.innerHTML = `
-            <div class="menu-container">
-                <div class="menu-title">⚡ Reaction Game</div>
-                <div id="game">
-                    <div id="reaction-box" class="reaction-box start-screen">
-                        Click this box to start!<br>
-                        When it turns green, click as fast as you can.
+                <div class="game-overlay">
+                    <div id="target-area" class="target-area start-state">
+                        <div class="game-text">TAP TO START</div>
                     </div>
+                    <button class="back-btn" id="go-back">⬅ Exit to Menu</button>
                 </div>
-                <button id="menu" style="margin-top:20px;">Back to Menu</button>
-            </div>
             `;
 
-            const box = document.getElementById("reaction-box");
-            const menuBtn = document.getElementById("menu");
+            const target = document.getElementById("target-area");
+            const backBtn = document.getElementById("go-back");
 
-            menuBtn.onclick = ()=> location.reload(); // возврат в главное меню
-
-            // старт игры по клику на синее поле
-            box.onclick = ()=> startGame(box);
+            backBtn.onclick = () => location.reload();
+            target.onclick = () => beginCycle(target);
         }
 
-        /* Основной игровой процесс */
-        function startGame(box){
-            box.classList.remove("start-screen");
-            box.style.backgroundColor = "red";
-            box.innerHTML = ""; // очищаем текст
+        function beginCycle(el) {
+            el.className = "target-area wait-state";
+            el.innerHTML = '<div class="game-text">WAIT FOR GREEN...</div>';
 
             let startTime = null;
-            let clicked = false;
+            const delay = Math.random() * 3000 + 2000;
 
-            // случайная задержка для смены цвета на зеленый
-            const changeTime = Math.random() * 3000 + 2000;
-
-            const timer = setTimeout(()=>{
-                box.style.backgroundColor = "green";
+            const timer = setTimeout(() => {
+                el.className = "target-area click-state";
+                el.innerHTML = '<div class="game-text">HIT IT!</div>';
                 startTime = Date.now();
-                box.innerHTML = "CLICK!";
-            }, changeTime);
+            }, delay);
 
-            // клик по квадрату
-            box.onclick = ()=>{
-                if(clicked) return;
-                clicked = true;
-
-                if(startTime){ // успел на зеленый
-                    const reaction = Date.now() - startTime;
-                    box.innerHTML = `🎉 ${reaction} ms<br>Click box to play again!`;
-                } else { // клик до зеленого
+            el.onclick = () => {
+                if (startTime) {
+                    const diff = Date.now() - startTime;
+                    el.className = "target-area start-state";
+                    el.innerHTML = `<div class="game-text">${diff}ms<br><small>Tap to try again</small></div>`;
+                    el.onclick = () => beginCycle(el);
+                } else {
                     clearTimeout(timer);
-                    box.innerHTML = `⚠ Too early!<br>Click box to try again!`;
+                    el.className = "target-area start-state";
+                    el.innerHTML = '<div class="game-text">TOO EARLY!<br><small>Try again</small></div>';
+                    el.onclick = () => beginCycle(el);
                 }
-
-                // после завершения игры клик запускает новую попытку
-                box.onclick = ()=> startGame(box);
             };
         }
 
-        showStartScreen();
+        render();
     }
 };
 

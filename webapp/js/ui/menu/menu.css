@@ -1,43 +1,97 @@
-.menu-container{
-    width:100%;
-    max-width:500px;
-    margin:auto;
+/* Контейнер меню */
+.menu-wrapper {
+    width: 100%;
+    max-width: 420px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: fadeIn 0.5s ease-out;
 }
 
-.menu-title{
-    font-size:32px;
-    margin:30px 0;
-    text-align:center;
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-.games-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:20px;
+/* Заголовок */
+.menu-header {
+    text-align: center;
+    margin-bottom: 40px;
+    margin-top: 20px;
 }
 
-.game-card{
-    background:#1e293b;
-    padding:25px;
-    border-radius:15px;
-    cursor:pointer;
-    transition:0.2s;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
+.menu-title {
+    font-size: 36px;
+    font-weight: 800;
+    margin: 0;
+    background: linear-gradient(135deg, #60a5fa 0%, #a855f7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
 }
 
-.game-card:hover{
-    transform:scale(1.05);
-    background:#334155;
+.menu-subtitle {
+    color: #94a3b8;
+    font-size: 12px;
+    margin-top: 8px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
 }
 
-.game-icon{
-    font-size:40px;
-    margin-bottom:10px;
+/* Сетка карточек */
+.games-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    width: 100%;
 }
 
-.game-title{
-    font-size:18px;
-    text-align:center;
+.game-card {
+    background: rgba(30, 41, 59, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 25px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* Состояния карточек */
+.game-card.active:active {
+    transform: scale(0.92);
+    background: rgba(51, 65, 85, 0.9);
+    border-color: rgba(96, 165, 250, 0.5);
+}
+
+.game-card.disabled {
+    opacity: 0.5;
+    filter: grayscale(0.8);
+    cursor: not-allowed;
+}
+
+/* Внутренние элементы карточки */
+.game-icon {
+    font-size: 40px;
+    margin-bottom: 12px;
+}
+
+.game-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #f1f5f9;
+}
+
+.game-status {
+    font-size: 9px;
+    color: #94a3b8;
+    margin-top: 6px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 600;
 }

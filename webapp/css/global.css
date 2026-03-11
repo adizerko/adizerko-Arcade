@@ -1,0 +1,14 @@
+body {
+    margin:0;
+    background:#0f172a;
+    color:white;
+    font-family:Arial;
+    display:flex;
+    justify-content:center;
+}
+
+#app {
+    width:100%;
+    max-width:600px;
+    padding:20px;
+}

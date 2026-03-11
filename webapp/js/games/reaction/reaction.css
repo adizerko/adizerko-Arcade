@@ -1,0 +1,75 @@
+/* Контейнер для игры и меню */
+.menu-container {
+    width:100%;
+    padding:10px;
+    box-sizing:border-box;
+}
+
+/* Квадрат игры */
+.reaction-box {
+    width:100%;           /* на всю ширину контейнера */
+    max-width:100vw;      /* не больше ширины экрана */
+    aspect-ratio:1/1;     /* квадрат */
+    max-height:80vh;      /* не выше 80% экрана */
+    background-color:red;
+    border-radius:15px;
+    cursor:pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:6vw;        /* адаптивный шрифт */
+    text-align:center;
+    color:white;
+    user-select:none;
+    margin:0 auto;        /* по центру */
+    padding:10px;
+}
+
+/* Синий стартовый экран */
+.reaction-box.start-screen {
+    background-color:#2563eb;
+}
+
+/* Кнопка Back to Menu */
+button#menu {
+    width:90%;        /* почти весь экран на телефоне */
+    max-width:200px;  /* на ПК не слишком большая */
+    padding:10px;
+    font-size:16px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    background-color:#334155;
+    color:white;
+    display:block;
+    margin:20px auto;
+}
+
+/* Медиа-запрос для ПК */
+@media (min-width:768px) {
+    .reaction-box {
+        max-width:600px;
+        font-size:2vw;
+        margin:20px auto;
+    }
+}
+
+/* Медиа-запрос для маленьких экранов */
+@media (max-width:480px) {
+    body, .menu-container {
+        width:100%;
+        max-width:100%;
+        padding:0;
+    }
+    .reaction-box {
+        width:100vw;
+        height:80vh;
+        font-size:6vw;
+        margin:0;
+        border-radius:0;
+    }
+    button#menu {
+        max-width:90%;
+    }
+}

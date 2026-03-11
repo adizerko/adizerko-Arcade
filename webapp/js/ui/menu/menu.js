@@ -23,7 +23,7 @@ export function showMenu() {
                     <div class="game-status">PLAY NOW</div>
                 </div>
 
-                <div class="game-card disabled">
+                <div class="game-card active" id="btn-math">
                     <div class="game-icon">🎲</div>
                     <div class="game-title">Math</div>
                     <div class="game-status">COMING SOON</div>
@@ -47,4 +47,10 @@ export function showMenu() {
     if (memoryBtn) {
         memoryBtn.onclick = () => startGame("memory");
     }
+
+    const mathBtn = document.getElementById("btn-math");
+    if (mathBtn) {
+        mathBtn.onclick = () => startGame("math");
+    }
+
 }

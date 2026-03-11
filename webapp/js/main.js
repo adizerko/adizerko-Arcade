@@ -5,6 +5,7 @@ import { showMenu } from "./ui/menu/menu.js";
 import "./games/reaction/reaction.js";
 import "./games/memory/memory.js";
 import "./games/math/math.js";
+import "./games/flags/flags.js";
 
 const tg = window.Telegram.WebApp;
 tg.ready();

@@ -29,10 +29,10 @@ export function showMenu() {
                     <div class="game-status">PLAY NOW</div>
                 </div>
 
-                <div class="game-card disabled">
+                <div class="game-card active" id="btn-flags">
                     <div class="game-icon">🌍</div>
                     <div class="game-title">Flags</div>
-                    <div class="game-status">COMING SOON</div>
+                    <div class="game-status">PLAY NOW</div>
                 </div>
             </div>
         </div>
@@ -51,6 +51,11 @@ export function showMenu() {
     const mathBtn = document.getElementById("btn-math");
     if (mathBtn) {
         mathBtn.onclick = () => startGame("math");
+    }
+
+    const flagsBtn = document.getElementById("btn-flags");
+    if (flagsBtn) {
+        flagsBtn.onclick = () => startGame("flags");
     }
 
 }

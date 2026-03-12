@@ -4,28 +4,26 @@ const memoryGame = {
   start() {
     const app = document.getElementById("app");
 
-    // Инъекция стилей (все в одном месте, без дублирования)
     if (!document.getElementById("memory-dynamic-style")) {
       const style = document.createElement("style");
       style.id = "memory-dynamic-style";
       style.textContent = `
-        /* Layout Containers */
         .memory-overlay {
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: flex-start;
-          padding: 40px 20px;
+          padding: 10px 20px 40px 20px;
           min-height: 100vh;
           background: #0f172a;
           color: white;
           font-family: system-ui, -apple-system, sans-serif;
           box-sizing: border-box;
+          overflow-y: auto;
         }
 
-        /* Typography */
         .memory-title {
-          font-size: clamp(38px, 10vw, 56px);
+          font-size: clamp(34px, 10vw, 50px);
           font-weight: 900;
           letter-spacing: 2px;
           text-transform: uppercase;
@@ -33,13 +31,13 @@ const memoryGame = {
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           filter: drop-shadow(0 0 15px rgba(168, 85, 247, 0.4));
-          margin-bottom: 5px;
+          margin: 0;
           text-align: center;
         }
 
         .memory-subtitle {
           color: #94a3b8;
-          margin-bottom: clamp(25px, 5vh, 40px);
+          margin-bottom: 15px;
           font-size: 10px;
           font-weight: 600;
           letter-spacing: 2px;
@@ -47,37 +45,36 @@ const memoryGame = {
           text-align: center;
         }
 
-        /* Level Selection Menu */
         .level-menu {
           display: flex;
           flex-direction: column;
-          gap: 12px;
+          gap: 8px; /* Уменьшили зазор между кнопками */
           width: 100%;
           max-width: 320px;
+          margin-bottom: 20px;
         }
 
         .level-card {
           background: rgba(255, 255, 255, 0.03);
           border: 1px solid rgba(255, 255, 255, 0.08);
-          padding: 18px 24px;
-          border-radius: 20px;
+          padding: 12px 20px; /* Сделали боксы компактнее (было 18/24) */
+          border-radius: 16px;
           cursor: pointer;
           display: flex;
           justify-content: space-between;
           align-items: center;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          transition: all 0.3s ease;
         }
 
         .level-card:hover {
           background: rgba(168, 85, 247, 0.1);
           border-color: rgba(168, 85, 247, 0.4);
-          transform: translateY(-3px);
+          transform: translateY(-2px);
         }
 
-        .level-info h3 { margin: 0; font-size: 18px; color: #f8fafc; }
-        .level-info span { font-size: 11px; color: #64748b; font-family: monospace; }
+        .level-info h3 { margin: 0; font-size: 16px; color: #f8fafc; } /* Чуть меньше шрифт */
+        .level-info span { font-size: 10px; color: #64748b; font-family: monospace; }
 
-        /* Game Grid */
         .memory-grid {
           display: grid;
           gap: clamp(8px, 2vw, 12px);
@@ -95,8 +92,6 @@ const memoryGame = {
           border-radius: 14px;
           cursor: pointer;
           transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-          user-select: none;
-          position: relative;
         }
 
         .memory-card.flipped {
@@ -115,12 +110,11 @@ const memoryGame = {
           background: rgba(34, 197, 94, 0.1) !important;
         }
 
-        /* Buttons */
         .action-btn { 
           background: rgba(255, 255, 255, 0.05); 
           border: 1px solid rgba(255, 255, 255, 0.1); 
           border-radius: 50px; 
-          padding: 14px 30px; 
+          padding: 12px 30px; 
           color: rgba(255, 255, 255, 0.8); 
           font-size: 13px; font-weight: 700; 
           text-transform: uppercase; cursor: pointer; 
@@ -133,13 +127,12 @@ const memoryGame = {
           transform: translateY(-2px);
         }
 
-        .btn-danger:hover {
-          background: rgba(239, 68, 68, 0.15);
-          border-color: rgba(239, 68, 68, 0.4);
-          color: #fca5a5;
+        .btn-exit-hover:hover {
+          background: rgba(239, 68, 68, 0.2) !important;
+          border-color: rgba(239, 68, 68, 0.5) !important;
+          color: #ffffff !important;
         }
 
-        /* Modal Modern */
         .win-modal {
           display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%) scale(0.8);
           background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
@@ -158,7 +151,6 @@ const memoryGame = {
 
         .modal-btns { display: flex; flex-direction: column; gap: 10px; }
         .btn-restart { background: rgba(168, 85, 247, 0.15) !important; border-color: #a855f7 !important; color: white !important; }
-        .btn-restart:hover { box-shadow: 0 0 20px rgba(168, 85, 247, 0.3); background: rgba(168, 85, 247, 0.25) !important; }
       `;
       document.head.appendChild(style);
     }
@@ -170,7 +162,7 @@ const memoryGame = {
       { id: 'master', name: 'Master', rows: 6, cols: 6 }
     ];
 
-    const symbols = ["🍎","🍌","🍇","🍉","🍓","🍒","🥝","🍍","🥭","🍑","🍐","🍋","🍊","🍈","🍏","🫐","🥥","🥝"];
+    const symbols = ["🍎","🍌","🍇","🍉","🍓","🍒","🥝","🍍","🥭","🍑","🍐","🍋","🍊","🍈","🍏","🫐","🥥","🥑"];
 
     const showLevelMenu = () => {
       app.innerHTML = `
@@ -188,7 +180,7 @@ const memoryGame = {
               </div>
             `).join('')}
           </div>
-          <button id="main-back" class="action-btn" style="margin-top: auto; width: 220px;">Back to Home</button>
+          <button id="main-back" class="action-btn btn-exit-hover" style="width: 220px;">Back to Home</button>
         </div>
       `;
 
@@ -216,7 +208,7 @@ const memoryGame = {
           
           <div class="memory-grid" id="memory-grid" style="grid-template-columns: repeat(${level.cols}, 1fr);"></div>
           
-          <button id="give-up" class="action-btn btn-danger" style="width: 180px;">Quit Game</button>
+          <button id="give-up" class="action-btn btn-exit-hover" style="width: 180px;">Quit Game</button>
 
           <div id="win-modal" class="win-modal">
             <h2 style="margin:0; font-size: 24px; color:#a855f7;">VICTORY!</h2>
@@ -232,7 +224,7 @@ const memoryGame = {
             </div>
             <div class="modal-btns">
               <button id="win-restart" class="action-btn btn-restart">Play Again</button>
-              <button id="win-menu" class="action-btn">Main Menu</button>
+              <button id="win-menu" class="action-btn btn-exit-hover">Main Menu</button>
             </div>
           </div>
         </div>

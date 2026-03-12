@@ -96,7 +96,6 @@ const colorMatchGame = {
                 100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
             }
 
-            /* ДОБАВЛЕНО: Частица палитры при клике на вопрос */
             .cm-palette-particle {
                 position: fixed; pointer-events: none; border-radius: 4px; z-index: 1001;
                 width: 12px; height: 12px; 
@@ -115,20 +114,20 @@ const colorMatchGame = {
             }
 
             .question-container {
-                background: rgba(255, 255, 255, 0.03); 
-                border: 3px solid rgba(255, 255, 255, 0.08);
+                border: 3px solid rgba(255, 255, 255, 0.3);
                 padding: 16px 20px; border-radius: 24px; margin-bottom: 25px;
                 width: 100%; max-width: 440px; 
                 text-align: center; position: relative;
                 transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); overflow: visible;
                 z-index: 5;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             }
             
             .cm-main-question {
-                font-size: 48px; font-weight: 800; color: #f1f5f9; position: relative; 
+                font-size: 48px; font-weight: 900; position: relative; 
                 z-index: 2; transition: opacity 0.1s, transform 0.1s; 
-                text-shadow: 0 4px 10px rgba(0,0,0,0.5);
-                text-transform: uppercase; letter-spacing: -2px;
+                text-shadow: 0 4px 15px rgba(0,0,0,0.9), 0 0 5px rgba(0,0,0,1);
+                text-transform: uppercase; letter-spacing: -1px;
                 transform-origin: top center; cursor: pointer;
             }
 
@@ -144,18 +143,39 @@ const colorMatchGame = {
             .question-container.on-fire {
                 animation: qPlasmaPulse 2s infinite alternate;
                 border-color: var(--streak-color);
-                box-shadow: 0 0 15px var(--streak-color), inset 0 0 5px var(--streak-color);
             }
             @keyframes qPlasmaPulse {
-                0% { box-shadow: 0 0 10px var(--streak-color), inset 0 0 3px var(--streak-color); }
-                100% { box-shadow: 0 0 20px var(--streak-color), inset 0 0 8px var(--streak-color); }
+                0% { box-shadow: 0 0 20px var(--streak-color), inset 0 0 10px var(--streak-color); }
+                100% { box-shadow: 0 0 40px var(--streak-color), inset 0 0 20px var(--streak-color); }
             }
 
             .cm-stat-box {
                 background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1);
                 padding: 12px 24px; border-radius: 16px; text-align: center; min-width: 90px;
                 transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                position: relative;
+                position: relative; cursor: pointer;
+                user-select: none;
+            }
+
+            /* Эффекты при клике на статы */
+            .cm-stat-box.stat-pulse {
+                animation: toxicNeonPulse 0.5s ease-out;
+            }
+            @keyframes toxicNeonPulse {
+                0% { box-shadow: 0 0 0 0 rgba(57, 255, 20, 0.8), inset 0 0 15px rgba(57, 255, 20, 0.6); transform: scale(0.9); }
+                50% { box-shadow: 0 0 25px 15px rgba(57, 255, 20, 0), inset 0 0 30px rgba(57, 255, 20, 0.9); transform: scale(1.15); }
+                100% { box-shadow: 0 0 0 0 rgba(57, 255, 20, 0), inset 0 0 0 rgba(57, 255, 20, 0); transform: scale(1); }
+            }
+
+            .stat-spark {
+                position: fixed; pointer-events: none; border-radius: 50%;
+                background: #39ff14; box-shadow: 0 0 10px #39ff14, 0 0 20px #39ff14;
+                z-index: 3000;
+                animation: sparkFly 0.6s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+            }
+            @keyframes sparkFly {
+                0% { transform: translate(-50%, -50%) scale(1.5); opacity: 1; }
+                100% { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0); opacity: 0; }
             }
 
             .cm-header-block { text-align: center; margin-top: 15px; margin-bottom: 25px; }
@@ -173,38 +193,49 @@ const colorMatchGame = {
                 position: absolute; top: 2px; right: 20px; font-size: 11px; font-weight: 900;
                 color: #94a3b8; opacity: 0; transform: translateY(-10px); transition: all 0.3s ease;
                 text-transform: uppercase; letter-spacing: 1px; z-index: 10;
+                text-shadow: 0 2px 5px rgba(0,0,0,0.8);
             }
-            .on-fire .streak-tag { opacity: 1; transform: translateY(0); }
+            .on-fire .streak-tag { opacity: 1; transform: translateY(0); color: #fff;}
 
             .cm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 440px; margin-bottom: 25px; z-index: 5; }
             
             .cm-btn {
-                background: rgba(255, 255, 255, 0.03); 
-                border: 1px solid rgba(255, 255, 255, 0.08);
+                border: 2px solid rgba(255, 255, 255, 0.4);
                 padding: 24px; border-radius: 20px; 
-                font-size: 20px; font-weight: 800; text-transform: uppercase;
-                cursor: pointer; transition: all 0.3s ease; -webkit-tap-highlight-color: transparent;
+                font-size: 20px; font-weight: 900; text-transform: uppercase;
+                cursor: pointer; transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); -webkit-tap-highlight-color: transparent;
                 position: relative; overflow: hidden;
+                text-shadow: 0 2px 8px rgba(0,0,0,0.9), 0 0 3px rgba(0,0,0,1);
+                box-shadow: 0 4px 15px rgba(0,0,0,0.4);
             }
             
             .cm-btn::before {
                 content: ''; position: absolute; top: 0; left: -150%; width: 100%; height: 100%;
-                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
                 transition: left 0.6s ease;
             }
 
-            .cm-btn:hover {
-                transform: translateY(-3px);
-                background: rgba(255, 255, 255, 0.08) !important;
-                border-color: rgba(255, 255, 255, 0.3) !important;
-                box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+            /* ИЗМЕНЕНО: Эффект при наведении без смены цвета */
+            @media (hover: hover) and (pointer: fine) {
+
+                .cm-btn:hover {
+                    transform: scale(1.06) translateY(-4px);
+                    box-shadow: 0 12px 30px var(--btn-glow, rgba(255,255,255,0.6)), inset 0 0 15px rgba(255,255,255,0.3);
+                    z-index: 10;
+                    border-color: rgba(255, 255, 255, 0.9);
+                }
+
+                .cm-btn:hover::before { 
+                    left: 150%; 
+                }
+
             }
             
             .cm-btn:hover::before { left: 150%; } 
-            .cm-btn:active { transform: scale(0.95) translateY(0); }
+            .cm-btn:active { transform: scale(0.92) translateY(0); box-shadow: 0 2px 10px rgba(0,0,0,0.5); }
 
-            .cm-btn.wrong { animation: btnShake 0.4s ease-in-out; border-color: #ef4444 !important; background: rgba(239, 68, 68, 0.25) !important; color: #fff !important;}
-            .cm-btn.correct { border-color: #22c55e !important; background: rgba(34, 197, 94, 0.25) !important; color: #fff !important;}
+            .cm-btn.wrong { animation: btnShake 0.4s ease-in-out; border-color: #ef4444 !important; background: #ef4444 !important; color: #fff !important;}
+            .cm-btn.correct { border-color: #22c55e !important; background: #22c55e !important; color: #fff !important;}
 
             .action-btn { 
                 background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
@@ -231,7 +262,6 @@ const colorMatchGame = {
             
             .action-btn:hover::before { left: 150%; }
 
-            /* ИЗМЕНЕНО: МОДАЛЬНОЕ ОКНО КОМПАКТНЕЕ */
             .cm-modal {
                 display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%);
                 background: rgba(15, 23, 42, 0.9); 
@@ -250,13 +280,7 @@ const colorMatchGame = {
                 -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             }
 
-            /* ИЗМЕНЕНО: Статы на одном уровне */
-            .modal-stats-grid { 
-                display: grid; 
-                grid-template-columns: 1fr 1fr; /* Две колонки */
-                gap: 12px; 
-                margin-bottom: 25px; 
-            }
+            .modal-stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px; }
             
             .modal-stat-card {
                 background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);
@@ -287,11 +311,11 @@ const colorMatchGame = {
                 <div class="cm-header-block"><h1 class="cm-title">CHALLENGE</h1></div>
                 
                 <div class="cm-stats-row">
-                    <div class="cm-stat-box">
+                    <div id="time-box" class="cm-stat-box" onclick="colorMatchGame.triggerStatEffect(this, event)">
                         <span class="stat-label">Time</span>
                         <span id="cm-timer" class="stat-value">30s</span>
                     </div>
-                    <div id="score-box" class="cm-stat-box">
+                    <div id="score-box" class="cm-stat-box" onclick="colorMatchGame.triggerStatEffect(this, event)">
                         <span class="stat-label">Score</span>
                         <span id="cm-score" class="stat-value">0</span>
                     </div>
@@ -332,7 +356,6 @@ const colorMatchGame = {
             </div>
         `;
         
-        // ДОБАВЛЕНО: Обработчик клика на вопрос для палитры
         const wordEl = document.getElementById("cm-word");
         wordEl.onclick = (e) => this.createPaletteSplash(e.clientX, e.clientY);
 
@@ -342,10 +365,38 @@ const colorMatchGame = {
         };
     },
 
-    // ДОБАВЛЕНО: ЭФФЕКТ ПАЛИТРЫ ЦВЕТОВ
+    // ДОБАВЛЕНО: Эффект клика по статам (Time, Score)
+    triggerStatEffect(el, e) {
+        el.classList.remove("stat-pulse");
+        void el.offsetWidth; // Триггер рефлоу для перезапуска анимации
+        el.classList.add("stat-pulse");
+        
+        const rect = el.getBoundingClientRect();
+        const x = e ? e.clientX : rect.left + rect.width / 2;
+        const y = e ? e.clientY : rect.top + rect.height / 2;
+
+        for (let i = 0; i < 10; i++) {
+            const spark = document.createElement('div');
+            spark.className = 'stat-spark';
+            const size = Math.random() * 6 + 3;
+            spark.style.width = `${size}px`; 
+            spark.style.height = `${size}px`;
+            spark.style.left = `${x}px`;
+            spark.style.top = `${y}px`;
+            
+            const angle = Math.random() * Math.PI * 2;
+            const dist = Math.random() * 80 + 40;
+            
+            spark.style.setProperty('--dx', `${Math.cos(angle) * dist}px`);
+            spark.style.setProperty('--dy', `${Math.sin(angle) * dist}px`);
+            
+            document.body.appendChild(spark);
+            setTimeout(() => spark.remove(), 600);
+        }
+    },
+
     createPaletteSplash(x, y) {
         COLORS.forEach((color, i) => {
-            // Создаем несколько частиц для каждого цвета
             for(let j = 0; j < 2; j++) {
                 const p = document.createElement('div');
                 p.className = 'cm-palette-particle';
@@ -373,7 +424,8 @@ const colorMatchGame = {
         const qContainer = document.getElementById("q-container");
         const wordEl = document.getElementById("cm-word");
         
-        qContainer.style.backgroundColor = `${COLORS[Math.floor(Math.random() * COLORS.length)].value}18`; 
+        // ИЗМЕНЕНО: Яркий сплошной цвет для фона вопроса
+        qContainer.style.backgroundColor = COLORS[Math.floor(Math.random() * COLORS.length)].value; 
 
         wordEl.innerText = COLORS[wordIdx].name;
         wordEl.style.color = COLORS[targetColorIdx].value;
@@ -393,15 +445,19 @@ const colorMatchGame = {
         const options = new Set([targetColorIdx]);
         while(options.size < 4) options.add(Math.floor(Math.random() * COLORS.length));
         const finalOptions = Array.from(options).sort(() => Math.random() - 0.5);
+        
+        // ИЗМЕНЕНО: Получаем 4 уникальных ярких фона и 4 уникальных цвета для шрифтов
         const shuffledBg = [...COLORS].sort(() => Math.random() - 0.5).slice(0, 4);
+        const shuffledText = [...COLORS].sort(() => Math.random() - 0.5).slice(0, 4);
 
         finalOptions.forEach((idx, i) => {
             const btn = document.createElement('button');
             btn.className = 'cm-btn';
             btn.innerText = COLORS[idx].name;
-            btn.style.color = COLORS[Math.floor(Math.random() * COLORS.length)].value;
-            btn.style.backgroundColor = `${shuffledBg[i].value}33`; 
-            btn.style.borderColor = `${shuffledBg[i].value}66`;
+            btn.style.color = shuffledText[i].value; 
+            btn.style.backgroundColor = shuffledBg[i].value; 
+            btn.style.setProperty('--btn-glow', shuffledBg[i].value); // Передаем цвет для неона при наведении
+            
             btn.onclick = (e) => this.checkAnswer(idx, e, btn);
             grid.appendChild(btn);
         });

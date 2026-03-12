@@ -1,34 +1,176 @@
+/* Основные стили страницы (для контекста) */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #0f172a; /* Темный фон */
+    color: #f1f5f9;
+    font-family: 'Inter', sans-serif; /* Рекомендуемый шрифт */
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+}
+
 /* Контейнер меню */
 .menu-wrapper {
     width: 100%;
-    max-width: 420px;
+    max-width: 380px;
     padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    animation: fadeIn 0.5s ease-out;
+    position: relative; /* Для позиционирования свечения */
+    overflow: hidden;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+/* --- НОВЫЕ ЭФФЕКТЫ --- */
+
+/* Живое фоновое свечение (Ambient Glow) */
+.ambient-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px); /* Сильное размытие */
+    opacity: 0.3; /* Полупрозрачность */
+    z-index: -1; /* Позади всего */
+    animation: floatGlow 10s infinite alternate ease-in-out;
 }
 
-/* Заголовок */
+.glow-1 {
+    width: 250px;
+    height: 250px;
+    background: #60a5fa; /* Синий */
+    top: -50px;
+    left: -100px;
+}
+
+.glow-2 {
+    width: 300px;
+    height: 300px;
+    background: #a855f7; /* Фиолетовый */
+    bottom: -100px;
+    right: -100px;
+    animation-delay: -5s; /* Асинхронное движение */
+}
+
+@keyframes floatGlow {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(50px, 50px) scale(1.1); }
+}
+
+/* АНИМАЦИИ ДЛЯ ИКОНОК */
+
+/* Контейнер для иконок, чтобы центрировать анимации */
+.game-icon-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px; /* Фиксированная высота */
+    margin-bottom: 12px;
+}
+
+.game-icon {
+    font-size: 48px;
+    /* Улучшаем отображение эмодзи */
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+    will-change: transform; /* Оптимизация производительности */
+}
+
+/* ⚡ Wiggle (Покачивание) - зазывает */
+.game-icon.wiggle {
+    animation: wiggle 2s infinite ease-in-out;
+}
+
+@keyframes wiggle {
+    0%, 100% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+}
+
+/* 🧠 Float (Плаванье) - зазывает */
+.game-icon.float {
+    animation: float 3s infinite ease-in-out;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+/* 🎲 Spin (Вращение) - зазывает */
+.game-icon.spin {
+    animation: spin 4s infinite linear;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* 🌍 Wave (Волна) - зазывает */
+.game-icon.wave {
+    animation: wave 2.5s infinite ease-in-out;
+    transform-origin: bottom center;
+}
+
+@keyframes wave {
+    0%, 100% { transform: rotate(-8deg); }
+    50% { transform: rotate(8deg); }
+}
+
+/* 🎨 Rainbow (Радуга) - зазывает */
+.game-icon.rainbow {
+    animation: rainbow 5s infinite linear;
+}
+
+@keyframes rainbow {
+    0% { filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)) hue-rotate(0deg); }
+    100% { filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)) hue-rotate(360deg); }
+}
+
+/* ЭФФЕКТЫ ДЛЯ КАРТОЧЕК */
+
+/* Заголовок с анимацией появления */
 .menu-header {
     text-align: center;
     margin-bottom: 40px;
     margin-top: 20px;
+    animation: fadeDown 0.8s ease-out forwards;
+}
+
+@keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .menu-title {
-    font-size: 36px;
-    font-weight: 800;
+    font-size: 40px;
+    font-weight: 900;
     margin: 0;
-    background: linear-gradient(135deg, #60a5fa 0%, #a855f7 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
     letter-spacing: -1px;
+
+    background: linear-gradient(
+        90deg,
+        #60a5fa,
+        #a855f7,
+        #22d3ee,
+        #a855f7,
+        #60a5fa
+    );
+    background-size: 350% 350%;
+
+    background-clip: text;
+    -webkit-background-clip: text;
+
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+
+    animation: arcadeGradient 7s ease infinite;
+
+    /* лёгкое свечение */
+    text-shadow: 0 0 18px rgba(96,165,250,0.25);
+}
+
+@keyframes arcadeGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 .menu-subtitle {
@@ -36,70 +178,116 @@
     font-size: 12px;
     margin-top: 8px;
     text-transform: uppercase;
-    letter-spacing: 3px;
+    letter-spacing: 4px;
+    font-weight: 600;
 }
 
 /* Сетка карточек */
 .games-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px;
+    gap: 12px;
     width: 100%;
 }
 
 .game-card {
-    background: rgba(30, 41, 59, 0.7);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(30, 41, 59, 0.6); /* Чуть прозрачнее */
+    border: 1px solid rgba(255, 255, 255, 0.08); /* Тоньше граница */
     border-radius: 24px;
-    padding: 25px 10px;
+    padding: 10px 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* плавный переход */
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px); /* Сильнее размытие */
+    -webkit-backdrop-filter: blur(12px);
     cursor: pointer;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    
+    /* Анимация появления карточек по очереди */
+    opacity: 0;
+    transform: translateY(20px);
+    animation: cardEnter 0.5s ease-out forwards;
+    animation-delay: calc(var(--anim-order) * 0.2s);
+    
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Эффект при наведении */
-.game-card.active:hover {
-    transform: scale(1.05); /* слегка увеличиваем */
-    background: rgba(51, 65, 85, 0.9);
-    border-color: rgba(96, 165, 250, 0.8);
+@keyframes cardEnter {
+    to { opacity: 1; transform: translateY(0); }
 }
 
-/* Состояния карточек */
+/* Улучшенный эффект при наведении (для десктопа) */
+.game-card.active.pulse-on-hover:hover {
+    transform: translateY(-5px); /* Чуть всплывает */
+    background: rgba(51, 65, 85, 0.8);
+    border-color: rgba(96, 165, 250, 0.6);
+    box-shadow: 0 10px 20px -5px rgba(96, 165, 250, 0.3);
+}
+
+/* Улучшенный эффект при нажатии (для мобильных - важно!) */
 .game-card.active:active {
-    transform: scale(0.92);
-    background: rgba(51, 65, 85, 0.9);
-    border-color: rgba(96, 165, 250, 0.5);
+    transform: scale(0.95); /* Сжатие */
+    background: rgba(96, 165, 250, 0.15); /* Подсветка */
+    border-color: #60a5fa;
+    box-shadow: 0 0 15px rgba(96, 165, 250, 0.5); /* Неоновое свечение */
+    transition: all 0.1s; /* Мгновенный отклик */
+}
+
+/* Останавливаем анимацию иконки при нажатии на карточку */
+.game-card.active:active .game-icon {
+    animation-play-state: paused;
 }
 
 .game-card.disabled {
-    opacity: 0.5;
-    filter: grayscale(0.8);
+    opacity: 0.4;
+    filter: grayscale(1);
     cursor: not-allowed;
 }
 
 /* Внутренние элементы карточки */
-.game-icon {
-    font-size: 40px;
-    margin-bottom: 12px;
-}
-
 .game-title {
     font-size: 16px;
     font-weight: 700;
-    color: #f1f5f9;
+    color: #f8fafc;
+    letter-spacing: 0.5px;
 }
 
 .game-status {
-    font-size: 9px;
-    color: #94a3b8;
-    margin-top: 6px;
-    background: rgba(0, 0, 0, 0.3);
-    padding: 3px 10px;
+    font-size: 10px;
+    color: #e2e8f0;
+    margin-top: 10px;
+    background: linear-gradient(135deg, rgba(96, 165, 250, 0.3), rgba(168, 85, 247, 0.3));
+    padding: 4px 12px;
     border-radius: 20px;
-    font-weight: 600;
+    font-weight: 700;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Эффект блика на кнопке PLAY NOW */
+.game-status.shine::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    animation: shine 3s infinite;
+}
+
+@keyframes shine {
+    to { left: 100%; }
+}
+
+/* плавная анимация */
+.game-icon-container {
+    transition: transform 0.25s ease;
+}
+
+/* увеличение иконки при наведении */
+.game-card:hover .game-icon-container {
+    transform: scale(1.35);
 }

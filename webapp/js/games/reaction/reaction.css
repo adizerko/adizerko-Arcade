@@ -8,35 +8,72 @@
     display: flex;
     flex-direction: column;
     z-index: 1000;
+    font-family: sans-serif;
+    overflow: hidden;
 }
 
 .target-area {
     flex-grow: 1;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     user-select: none;
+    transition: background-color 0.15s ease;
+    position: relative;
 }
 
 .game-text {
-    font-size: 28px;
-    font-weight: bold;
+    font-size: 32px;
+    font-weight: 800;
     text-align: center;
-    pointer-events: none;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    animation: fadeIn 0.2s ease-out;
 }
 
-/* Состояния игры */
-.start-state { background-color: #2563eb; }
-.wait-state { background-color: #dc2626; }
-.click-state { background-color: #22c55e; }
+.game-text small {
+    display: block;
+    font-size: 18px;
+    font-weight: 400;
+    margin-top: 15px;
+    opacity: 0.8;
+}
+
+.best-score {
+    position: absolute;
+    top: 30px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* Состояния */
+.start-state { background-color: #2563eb; }    /* Синий */
+.wait-state { background-color: #e11d48; }     /* Красный */
+.click-state { background-color: #22c55e; }    /* Зеленый */
+.error-state { background-color: #f59e0b; }    /* Оранжевый */
+.result-state { background-color: #2563eb; }   /* Снова синий */
 
 .back-btn {
-    height: 80px;
+    height: 90px;
     background: #1e293b;
     color: white;
     border: none;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
-    padding-bottom: env(safe-area-inset-bottom); /* Для iPhone */
+    cursor: pointer;
+    padding-bottom: env(safe-area-inset-bottom);
+    transition: background 0.2s;
+}
+
+.back-btn:active {
+    background: #334155;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }

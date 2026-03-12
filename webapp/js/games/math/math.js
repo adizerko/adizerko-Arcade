@@ -202,7 +202,7 @@ const mathGame = {
         .stat-value { font-size: 22px; font-weight: 800; color: #f1f5f9; transition: color 0.3s; }
 
         .streak-tag {
-          position: absolute; top: 15px; right: 20px; font-size: 11px; font-weight: 900;
+          position: absolute; top: 2px; right: 20px; font-size: 11px; font-weight: 900;
           color: #94a3b8; opacity: 0; transform: translateY(-10px); transition: all 0.3s ease;
           text-transform: uppercase; letter-spacing: 1px; z-index: 10;
         }

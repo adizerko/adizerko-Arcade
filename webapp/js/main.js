@@ -6,6 +6,7 @@ import "./games/reaction/reaction.js";
 import "./games/memory/memory.js";
 import "./games/math/math.js";
 import "./games/flags/flags.js";
+import "./games/colormatch/colormatch.js";
 
 const tg = window.Telegram.WebApp;
 tg.ready();

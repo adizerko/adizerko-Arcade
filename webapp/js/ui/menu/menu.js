@@ -34,6 +34,11 @@ export function showMenu() {
                     <div class="game-title">Flags</div>
                     <div class="game-status">PLAY NOW</div>
                 </div>
+                <div class="game-card active" id="btn-colormatch">
+                    <div class="game-icon">🌍</div>
+                    <div class="game-title">colormatch</div>
+                    <div class="game-status">PLAY NOW</div>
+                </div>
             </div>
         </div>
     `;
@@ -56,6 +61,11 @@ export function showMenu() {
     const flagsBtn = document.getElementById("btn-flags");
     if (flagsBtn) {
         flagsBtn.onclick = () => startGame("flags");
+    }
+
+    const colormatchBtn = document.getElementById("btn-colormatch");
+    if (colormatchBtn) {
+        colormatchBtn.onclick = () => startGame("colormatch");
     }
 
 }

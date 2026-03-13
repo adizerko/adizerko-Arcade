@@ -108,7 +108,13 @@ const highLowGame = {
         app.style.setProperty('--accent', config.color);
 
         const getCardHTML = (item, idx) => {
-            const path = item.img ? (item.img.startsWith('/') ? item.img : '/' + item.img) : '';
+            // 1. Очищаем путь от начальных слэшей, если они есть в data.js
+            let cleanPath = item.img ? item.img.replace(/^\/+/, '') : '';
+            
+            // 2. Формируем финальный путь. 
+            // На GitHub Pages нам нужно добавить имя репозитория.
+            const isGitHub = window.location.hostname.includes('github.io');
+            const path = isGitHub ? `/adizerko-Arcade/${cleanPath}` : cleanPath;
             
             // Определение класса пропорций
             let aspectClass = '';
@@ -118,7 +124,7 @@ const highLowGame = {
             return `
                 <div class="hl-card-item ${aspectClass}" id="hl-card-${idx}" onclick="window.highLowGame.select(${idx})">
                     <div class="hl-image-container">
-                        <img src="${path}" class="hl-card-img" onerror="this.src='https://via.placeholder.com/180x180/111/fff?text=? '">
+                        <img src="${path}" class="hl-card-img" onerror="this.src='https://via.placeholder.com/180x180/111/fff?text=Error'">
                     </div>
                     <div class="hl-item-name">${item.name}</div>
                     <div id="hl-val-${idx}" class="hl-card-value">

@@ -16,7 +16,7 @@ async def start(message: types.Message):
             [
                 types.KeyboardButton(
                     text="🎮 Play Mini Games",
-                    web_app=WebAppInfo(url="https://animated-brioche-80ec1a.netlify.app/")
+                    web_app=WebAppInfo(url="https://adizerko.github.io/adizerko-Arcade/")
                 )
             ]
         ],

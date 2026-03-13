@@ -1,0 +1,108 @@
+/* Основной контейнер игры */
+.hl-game-screen {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 100dvh !important;
+    width: 100vw !important;
+    background: radial-gradient(circle at center, #111 0%, #000 100%) !important;
+    position: fixed !important;
+    top: 0; left: 0;
+    z-index: 100;
+    overflow: hidden;
+}
+
+/* СЕТКА: Жестко фиксируем две колонки по 140px рядом */
+.hl-grid-row {
+    display: grid !important;
+    grid-template-columns: 140px 140px !important; 
+    gap: 20px !important;
+    justify-content: center !important;
+    align-items: start !important;
+    width: 100% !important;
+    margin-top: 20px;
+    animation: hlSlideUp 0.4s ease-out;
+}
+
+@keyframes hlSlideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Карточка */
+.hl-card-item {
+    width: 140px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.hl-card-item:active {
+    transform: scale(0.96);
+}
+
+/* Рамка для фото 140x250 */
+.hl-image-container {
+    width: 140px !important;
+    height: 250px !important;
+    border-radius: 16px !important;
+    border: 2px solid rgba(255, 255, 255, 0.1) !important;
+    overflow: hidden !important;
+    background: #111 !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    position: relative;
+}
+
+.hl-card-img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+}
+
+/* Текст под фото */
+.hl-item-name {
+    margin-top: 10px !important;
+    font-size: 13px !important;
+    font-weight: 900 !important;
+    text-align: center !important;
+    color: #fff !important;
+    text-transform: uppercase;
+    min-height: 34px;
+    line-height: 1.2;
+}
+
+/* Результаты */
+.hl-card-item.correct .hl-image-container {
+    border-color: #39ff14 !important;
+    box-shadow: 0 0 20px rgba(57, 255, 20, 0.6) !important;
+}
+
+.hl-card-item.wrong .hl-image-container {
+    border-color: #ff4444 !important;
+    box-shadow: 0 0 20px rgba(255, 68, 68, 0.6) !important;
+}
+
+/* Шапка */
+.hl-top-info {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.hl-score-text {
+    font-size: 12px;
+    font-weight: 900;
+    color: var(--accent);
+    letter-spacing: 2px;
+    margin-bottom: 5px;
+}
+
+.hl-task-title {
+    font-size: 20px;
+    font-weight: 900;
+    color: #fff;
+    margin: 0;
+    text-transform: uppercase;
+}

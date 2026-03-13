@@ -53,12 +53,20 @@ export function showMenu() {
                     <div class="game-title">Color Match</div>
                     <div class="game-status shine">PLAY NOW</div>
                 </div>
+
+                <div class="game-card active pulse-on-hover" id="btn-highlow" style="--anim-order: 6">
+                    <div class="game-icon-container">
+                        <div class="game-icon wave">⚖️</div>
+                    </div>
+                    <div class="game-title">High Low</div>
+                    <div class="game-status shine">PLAY NOW</div>
+                </div>
             </div>
         </div>
     `;
 
     // Привязка событий (остается прежней)
-    const games = ["reaction", "memory", "math", "flags", "colormatch"];
+    const games = ["reaction", "memory", "math", "flags", "colormatch", "highlow"];
     games.forEach(game => {
         const btn = document.getElementById(`btn-${game}`);
         if (btn) btn.onclick = () => startGame(game);

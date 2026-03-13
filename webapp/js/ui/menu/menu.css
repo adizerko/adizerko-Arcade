@@ -131,7 +131,7 @@ body {
     text-align: center;
     margin-bottom: 40px;
     margin-top: 20px;
-    animation: fadeDown 0.8s ease-out forwards;
+    animation: fadeDown 0.4s ease-out forwards;
 }
 
 @keyframes fadeDown {
@@ -208,7 +208,7 @@ body {
     opacity: 0;
     transform: translateY(20px);
     animation: cardEnter 0.5s ease-out forwards;
-    animation-delay: calc(var(--anim-order) * 0.2s);
+    animation-delay: calc(var(--anim-order) * 0.1s);
     
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }

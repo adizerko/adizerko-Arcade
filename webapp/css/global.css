@@ -1,5 +1,6 @@
 * {
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
 body, html {
@@ -7,16 +8,16 @@ body, html {
     padding: 0;
     width: 100%;
     height: 100%;
-    background-color: #0f172a;
+    background-color: #000;
     color: white;
-    font-family: -apple-system, system-ui, sans-serif;
-    overflow: hidden; /* Запрещаем скролл всей страницы */
+    font-family: 'Inter', -apple-system, system-ui, sans-serif;
+    overflow: hidden;
 }
 
 #app {
     width: 100%;
     height: 100%;
     display: flex;
-    justify-content: center; /* Центрируем всё содержимое */
-    align-items: flex-start;
+    justify-content: center; /* Центрирует по горизонтали */
+    align-items: flex-start; /* Поднимает всё к верху страницы */
 }
